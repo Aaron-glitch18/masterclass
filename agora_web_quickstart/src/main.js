@@ -14,11 +14,19 @@ let localVideoTrack = null;
 
 // Connection parameters
     let appId="dc5927f7476648e49a600b87ce49c38f"; 
-    let channel="reunion-de-mi-journee";
-    let token="007eJxTYNjy1vXfOmmGq6ULNf1UfpYk/OKKj5obavzTZH9G+L3L13MVGFKSTS2NzNPMTczNzEwsUk0sE80MDJIszJOBzGRji7Rzid1ZDYGMDG4fy5gYGSAQxBdlKEotzcvMz9NNSdXNzdTNyi8tyktNZWAAAP2GJvI=";
+    // let channel="reunion-de-mi-journee";
+    // let token="007eJxTYNjy1vXfOmmGq6ULNf1UfpYk/OKKj5obavzTZH9G+L3L13MVGFKSTS2NzNPMTczNzEwsUk0sE80MDJIszJOBzGRji7Rzid1ZDYGMDG4fy5gYGSAQxBdlKEotzcvMz9NNSdXNzdTNyi8tyktNZWAAAP2GJvI=";
     let uid=0;
 
 // Initialize the AgoraRTC client
+async function fetchToken(channel, uid) {
+  const response = await fetch(
+    `https://masterclass-red-xi.vercel.app/api/generateToken?channel=${channel}&uid=${uid}`
+  );
+  const data = await response.json();
+  return data.token;
+}
+
 function initializeClient() {
     client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
     setupEventListeners();
@@ -47,12 +55,14 @@ function setupEventListeners() {
 
 // Join a channel and publish local media
 async function joinChannel() {
+    const token = await fetchToken(channel, uid); // 🔄 récupère le token dynamique
     await client.join(appId, channel, token, uid);
     await createLocalTracks();
     await publishLocalTracks();
     displayLocalVideo();
     console.log("Publish success!");
 }
+
 
 // Create local audio and video tracks
 async function createLocalTracks() {
