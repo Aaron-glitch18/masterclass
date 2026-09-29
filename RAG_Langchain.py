@@ -10,8 +10,8 @@ from langchain_groq import ChatGroq
 def main():
     load_dotenv()
 
-    st.set_page_config(page_title="CivilStat AI")
-    st.header("CivilStat AI")
+    st.set_page_config(page_title="Deep PDF")
+    st.header("Deep PDF")
 
     # Initialisation mémoire
     if "chat_history" not in st.session_state:
